@@ -185,12 +185,56 @@ class Accountpilot < Formula
     sha256 "9ddf7c82fda3ae8e24decda1338ede66e1c99883db93711d8fb941eaa2d8c282"
   end
 
+  # The signed FDA helper is built and notarized out-of-band
+  # (scripts/release-helper.sh in the accountpilot repo) and shipped via
+  # GitHub Releases. Required for the iMessage plugin; Mail-only users
+  # on Linux or Intel macOS can still use the formula without it.
+  # 0.1.0 is Apple Silicon only — Intel build will land in 0.1.1.
+  if OS.mac? && Hardware::CPU.arm?
+    resource "accountpilot-fda-helper" do
+      url "https://github.com/aren13/accountpilot/releases/download/fda-helper-v0.1.0/accountpilot-fda-helper-0.1.0-arm64.tar.gz"
+      sha256 "dae150b7f9a306f010424041db7b00344e9c3556115216d6a149e6bbc9d5d026"
+    end
+  end
+
   def install
-    virtualenv_install_with_resources
+    # Install Python deps into a virtualenv but skip the FDA helper
+    # resource, which is a notarized Mach-O binary, not a Python sdist.
+    python_resources = resources.reject { |r| r.name == "accountpilot-fda-helper" }
+    venv = virtualenv_create(libexec, "python3.13")
+    venv.pip_install python_resources
+    venv.pip_install_and_link buildpath
+
+    return unless OS.mac? && Hardware::CPU.arm?
+
+    resource("accountpilot-fda-helper").stage do
+      bin.install "accountpilot-fda-helper"
+    end
+  end
+
+  def caveats
+    return unless OS.mac?
+    return if Hardware::CPU.intel?
+
+    <<~EOS
+      The iMessage plugin reads ~/Library/Messages/chat.db, which macOS gates
+      behind Full Disk Access. Grant FDA to the signed helper binary:
+
+        System Settings → Privacy & Security → Full Disk Access
+        ↳ add: #{opt_bin}/accountpilot-fda-helper
+
+      The grant survives `brew upgrade` because the helper is signed by
+      AccountPilot's developer team and its cdhash is stable across releases.
+      Run `accountpilot setup` to verify.
+    EOS
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/accountpilot --version")
     assert_match "Usage: accountpilot", shell_output("#{bin}/accountpilot --help")
+    if OS.mac? && Hardware::CPU.arm?
+      assert_match "accountpilot-fda-helper",
+                   shell_output("#{bin}/accountpilot-fda-helper --version")
+    end
   end
 end
