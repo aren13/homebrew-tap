@@ -3,8 +3,8 @@ class Accountpilot < Formula
 
   desc "Unified per-machine account sync framework — email, iMessage, calendar, and more"
   homepage "https://github.com/aren13/accountpilot"
-  url "https://files.pythonhosted.org/packages/74/2d/e138a01a4281fcbe99e3317969374b7b19ef816e188c9822e711813da73f/accountpilot-0.1.0.tar.gz"
-  sha256 "5c048e4b748a42d12ef2c34f9b5c8c0519fae0238d18e5f5d8fbf6457ccf8f77"
+  url "https://files.pythonhosted.org/packages/9a/e1/75f6e6550adee076602482a99387a6f226f5ee56f1ac9bf9236fd71bb431/accountpilot-0.1.1.tar.gz"
+  sha256 "eb08b64fec09b23115f0419704785531aac645b9a4c697492ab4164a73c7e97b"
   license "AGPL-3.0-or-later"
 
   depends_on "rust" => :build # cryptography, pydantic-core
@@ -205,7 +205,7 @@ class Accountpilot < Formula
     venv.pip_install python_resources
     venv.pip_install_and_link buildpath
 
-    return unless OS.mac? && Hardware::CPU.arm?
+    return if OS.linux? || Hardware::CPU.intel?
 
     resource("accountpilot-fda-helper").stage do
       bin.install "accountpilot-fda-helper"
