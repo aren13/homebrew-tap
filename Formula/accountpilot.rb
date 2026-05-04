@@ -3,8 +3,8 @@ class Accountpilot < Formula
 
   desc "Unified per-machine account sync framework — email, iMessage, calendar, and more"
   homepage "https://github.com/aren13/accountpilot"
-  url "https://files.pythonhosted.org/packages/9a/e1/75f6e6550adee076602482a99387a6f226f5ee56f1ac9bf9236fd71bb431/accountpilot-0.1.1.tar.gz"
-  sha256 "eb08b64fec09b23115f0419704785531aac645b9a4c697492ab4164a73c7e97b"
+  url "https://files.pythonhosted.org/packages/44/a4/45d16ff35d87809acc75170b2ea97d696bef5c21bafc22888cc2a2a2a56c/accountpilot-0.1.2.tar.gz"
+  sha256 "a9e1039f2f6ca1737e68bf6c8a0a09b982176e7dd7298ea3665eeaf7a1c1ca91"
   license "AGPL-3.0-or-later"
 
   depends_on "rust" => :build # cryptography, pydantic-core
