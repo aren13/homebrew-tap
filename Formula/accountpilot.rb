@@ -3,8 +3,8 @@ class Accountpilot < Formula
 
   desc "Unified per-machine account sync framework — email, iMessage, calendar, and more"
   homepage "https://github.com/aren13/accountpilot"
-  url "https://files.pythonhosted.org/packages/dd/2e/449fcbb57aa055e0bcff59c10edb17ef920b47304ede6ca6fb0199ae3150/accountpilot-0.1.3.tar.gz"
-  sha256 "48b330f3374268c2f47674dcb0e6ec93a83c92eb21ada80bc47403abf4cd5cb1"
+  url "https://files.pythonhosted.org/packages/7c/bd/abed55a22778656d0af9b27773158e95cf413e145c204d536f314c12ea60/accountpilot-0.1.4.tar.gz"
+  sha256 "48786a3e2e47c3afbdf25fd45e0d7217515323cbefda2b1c430855839d09b37d"
   license "AGPL-3.0-or-later"
 
   depends_on "rust" => :build # cryptography, pydantic-core
@@ -192,8 +192,8 @@ class Accountpilot < Formula
   # 0.1.0 is Apple Silicon only — Intel build will land in 0.1.1.
   if OS.mac? && Hardware::CPU.arm?
     resource "accountpilot-fda-helper" do
-      url "https://github.com/aren13/accountpilot/releases/download/fda-helper-v0.1.0/accountpilot-fda-helper-0.1.0-arm64.tar.gz"
-      sha256 "dae150b7f9a306f010424041db7b00344e9c3556115216d6a149e6bbc9d5d026"
+      url "https://github.com/aren13/accountpilot/releases/download/fda-helper-v0.1.1/accountpilot-fda-helper-0.1.1-arm64.tar.gz"
+      sha256 "641453d38baa95cd9c1090f6721a75dd650ca2760997ae59d04e1edc719aaba0"
     end
   end
 
